@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+		"module": "ESNext",
+		"target": "ES2015",
+		"strict": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"sourceMap": false,
+		"esModuleInterop": true,
+		"moduleResolution": "node16",
+		"lib": [
+			"esnext",
+			"dom"
+		],
+		"outDir": "dist"
+	}
+}
