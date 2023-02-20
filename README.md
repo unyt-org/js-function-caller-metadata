@@ -64,7 +64,7 @@ There is an advantage to injecting metadata in this way rather than passing it v
  * You can pass in metadata even to a function with rest parameters, because the metadata is passed in separately.
 
 
- ### Important Remarks
+ ## Important Remarks
 
   * When injecting metadata to an async function, always use `callWithMetadataAsync()`. Otherwise, the metadata might get deleted before the function execution is finished.
   * Call stacks might only be resolved up to a certain point. This is browser/runtime specific. The `getCallerInfo()` function might return different results in different runtimes.
