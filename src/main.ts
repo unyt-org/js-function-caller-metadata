@@ -50,7 +50,7 @@ export function getCallerFile() {
 	return parts
 		?.[Math.min(parts.length-1, 2)]
 		?.match(caller_file)
-		?.[1] ?? window.location.href
+		?.[1] ?? window.location?.href
 }
 
 /**
@@ -62,7 +62,7 @@ export function getCallerDir() {
 		?.[Math.min(parts.length-1, 2)]
 		?.match(caller_file)
 		?.[1]
-		?.replace(/[^\/\\]*$/, '') ?? window.location.href
+		?.replace(/[^\/\\]*$/, '') ?? window.location?.href
 }
 
 /**
