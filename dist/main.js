@@ -45,20 +45,22 @@ function getPartsFromStack(stack) {
         .split('\n');
 }
 export function getCallerFile() {
-    var _a, _b;
+    var _a, _b, _c, _d;
     const parts = getPartsFromStack(new Error().stack);
-    return (_b = (_a = parts === null || parts === void 0 ? void 0 : parts[Math.min(parts.length - 1, 2)]) === null || _a === void 0 ? void 0 : _a.match(caller_file)) === null || _b === void 0 ? void 0 : _b[1];
+    return (_c = (_b = (_a = parts === null || parts === void 0 ? void 0 : parts[Math.min(parts.length - 1, 2)]) === null || _a === void 0 ? void 0 : _a.match(caller_file)) === null || _b === void 0 ? void 0 : _b[1]) !== null && _c !== void 0 ? _c : (_d = window.location) === null || _d === void 0 ? void 0 : _d.href;
 }
 export function getCallerDir() {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e;
     const parts = getPartsFromStack(new Error().stack);
-    return (_c = (_b = (_a = parts === null || parts === void 0 ? void 0 : parts[Math.min(parts.length - 1, 2)]) === null || _a === void 0 ? void 0 : _a.match(caller_file)) === null || _b === void 0 ? void 0 : _b[1]) === null || _c === void 0 ? void 0 : _c.replace(/[^\/\\]*$/, '');
+    return (_d = (_c = (_b = (_a = parts === null || parts === void 0 ? void 0 : parts[Math.min(parts.length - 1, 2)]) === null || _a === void 0 ? void 0 : _a.match(caller_file)) === null || _b === void 0 ? void 0 : _b[1]) === null || _c === void 0 ? void 0 : _c.replace(/[^\/\\]*$/, '')) !== null && _d !== void 0 ? _d : (_e = window.location) === null || _e === void 0 ? void 0 : _e.href;
 }
 export function getCallerInfo() {
     var _a, _b;
     let parts = getPartsFromStack(new Error().stack);
     if (!parts)
         return null;
+    if (is_safari && parts[1].startsWith("@"))
+        parts.splice(1, 1);
     parts = parts.slice(Math.min(parts.length - 1, 2));
     const info = [];
     for (const part of parts) {

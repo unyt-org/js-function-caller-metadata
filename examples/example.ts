@@ -1,4 +1,4 @@
-import { callWithMetadata, callWithMetadataAsync, getCallerFile } from "../src/main.js"
+import { callWithMetadata, callWithMetadataAsync, getCallerFile } from "../dist/main.js"
 import { exampleGetCallerDir, exampleGetCallerInfo, exampleGetCallerPath, exampleGetCallerPathIndirect, exampleGetMetadata, exampleGetMetadataAsync } from "./moduleA.js"
 
 // get caller path

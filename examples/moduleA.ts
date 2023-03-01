@@ -1,4 +1,4 @@
-import { getCallerDir, getCallerFile, getCallerInfo, getMeta } from "../src/main.js";
+import { getCallerDir, getCallerFile, getCallerInfo, getMeta } from "../dist/main.js";
 
 export function exampleGetCallerPath(){
 	console.log("caller file: " + getCallerFile())
