@@ -64,8 +64,41 @@ There is an advantage to injecting metadata in this way rather than passing it v
  * You can pass in metadata even to a function with rest parameters, because the metadata is passed in separately.
 
 
- ## Important Remarks
+## Important Remarks
 
   * When injecting metadata to an async function, always use `callWithMetadataAsync()`. Otherwise, the metadata might get deleted before the function execution is finished.
   * Call stacks might only be resolved up to a certain point. This is browser/runtime specific. The `getCallerInfo()` function might return different results in different runtimes.
   * Keep in mind that this method of metadata injection is not as efficient as passing parameters directly to a function, since an error stack has to be generated each time. As long as the metadata is injected, but never read inside the function, the performance loss should be minimal, since the error stack is only generated when metadata is requested.
+
+## Safari Issues
+
+The [`Error.prototype.stack`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/stack) property is a non-standard feature and behaves differently in different browsers.
+The Safari errors stack deviates the most from the other browsers and sometimes leads to unexpected results.
+
+### Immediately returned function calls
+In the following example, the function `a` will not be captured in the Safari stack trace:
+```ts
+function b() {
+	console.log(getCallerInfo()) // [{name:null, ...}] - only contains (1)
+}
+
+function a() {
+	return b(); // (2)
+}
+
+a() // (1)
+```
+
+Workaround: Store the result of the function call first, don't return it immediately:
+```ts
+function b() {
+	console.log(getCallerInfo()) // [{name:"a", ...}, {name:null, ...}] - now contains (1) and (2)
+}
+
+function a() {
+    const result = b(); // (2)
+    return result;
+}
+
+a() // (1)
+```
