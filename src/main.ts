@@ -59,7 +59,7 @@ export function getCallerFile(error?: Error) {
 export function getCallerDir(error?: Error) {
 	const parts = getPartsFromStack((error??new Error()).stack);
 	return parts
-		?.[Math.min(parts.length-1, 2)]
+		?.[Math.max(parts.length-1, 2)] // get either last item or at least > 2rd item to ignore last intermediate calls
 		?.match(caller_file)
 		?.[1]
 		?.replace(/[^\/\\]*$/, '') ?? window.location?.href
