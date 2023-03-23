@@ -41,16 +41,21 @@ function getPartsFromStack(stack:string|undefined) {
 }
 
 
+function getCallerLineFromParts(parts?:string[]|null) {
+	const safari_double_call = is_safari && parts?.[1]?.startsWith("@"); // safari sometimes insert double call to stack, with anonymous name (starts with @)
+	return parts
+		?.[Math.min(parts.length-1, 2+(safari_double_call?1:0))] // get 2nd item (ignore this function and the function that called it, sometimes +1 for safari) - if stack too small, get last item
+		?.match(caller_file)
+		?.[1]
+}
+
 
 /**
  * returns the URL location from where the function that called getCallerFile() was called
  */
 export function getCallerFile(error?: Error) {
 	const parts = getPartsFromStack((error??new Error()).stack);
-	return parts
-		?.[Math.max(parts.length-1, 2)] // get either last item or at least > 2rd item to ignore last intermediate calls
-		?.match(caller_file)
-		?.[1] ?? window.location?.href
+	return getCallerLineFromParts(parts) ?? globalThis.location?.href
 }
 
 /**
@@ -58,11 +63,7 @@ export function getCallerFile(error?: Error) {
  */
 export function getCallerDir(error?: Error) {
 	const parts = getPartsFromStack((error??new Error()).stack);
-	return parts
-		?.[Math.max(parts.length-1, 2)] // get either last item or at least > 2rd item to ignore last intermediate calls
-		?.match(caller_file)
-		?.[1]
-		?.replace(/[^\/\\]*$/, '') ?? window.location?.href
+	return getCallerLineFromParts(parts)?.replace(/[^\/\\]*$/, '') ?? globalThis.location?.href
 }
 
 /**
