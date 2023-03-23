@@ -45,10 +45,10 @@ function getPartsFromStack(stack:string|undefined) {
 /**
  * returns the URL location from where the function that called getCallerFile() was called
  */
-export function getCallerFile() {
-	const parts = getPartsFromStack(new Error().stack);
+export function getCallerFile(error?: Error) {
+	const parts = getPartsFromStack((error??new Error()).stack);
 	return parts
-		?.[Math.min(parts.length-1, 2)]
+		?.[Math.max(parts.length-1, 2)] // get either last item or at least > 2rd item to ignore last intermediate calls
 		?.match(caller_file)
 		?.[1] ?? window.location?.href
 }
@@ -56,8 +56,8 @@ export function getCallerFile() {
 /**
  * returns the URL location directory from where the function that called getCallerDir() was called
  */
-export function getCallerDir() {
-	const parts = getPartsFromStack(new Error().stack);
+export function getCallerDir(error?: Error) {
+	const parts = getPartsFromStack((error??new Error()).stack);
 	return parts
 		?.[Math.min(parts.length-1, 2)]
 		?.match(caller_file)
@@ -74,8 +74,8 @@ export function getCallerDir() {
  * 		col: number|null
  * }
  */
-export function getCallerInfo() {
-	let parts = getPartsFromStack(new Error().stack);
+export function getCallerInfo(error?: Error) {
+	let parts = getPartsFromStack((error??new Error()).stack);
 	if (!parts) return null;
 	// remove second line '@...' without name in safari
 	if (is_safari && parts[1].startsWith("@")) parts.splice(1, 1); 
