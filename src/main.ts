@@ -25,7 +25,7 @@ function _callWithMetaData<args extends any[], returns>(key:number, fn:(...args:
     const encoded = '__meta__'+key+'__';
 	const _args = <args> args ?? [];
 	return is_safari ? 
-		new globalThis.Function('f', 'c', 'a', 'return (function '+encoded+'(){return c ? f.apply(c, a) : f(a)})()')(fn, ctx, args) : 
+		new globalThis.Function('f', 'c', 'a', 'return (function '+encoded+'(){return c ? f.apply(c, a) : f(...a)})()')(fn, ctx, args) : 
 		({[encoded]:()=>ctx ? fn.apply(ctx, _args) : fn(..._args)})[encoded]()
 }
 
