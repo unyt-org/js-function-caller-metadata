@@ -1,6 +1,6 @@
 # JS Function Caller Metadata
 
-JS runtime environmemts don't have a builtin way to get the path of the module from which a function call originated.
+JS runtime environmemts don't have a built-in way to get the path of the module from which a function call originated.
 But there are some use cases for such a functionality, e.g. the correct resolution of relative paths in externally called functions or logging, debugging, etc.
 
 The only way to get the caller path is to analyze the stack trace, which is not implemented uniformly in the different environments.
@@ -11,11 +11,12 @@ In addition to retrieving metadata about the caller (function name, path, locati
 
 ## Usage
 
-The module can be imported from https://cdn.jsdelivr.net/gh/unyt-org/js-function-caller-metadata/dist/main.min.js.
 
 ### Supported Environements
 This library is compatible with all major browsers (Firefox, Chrome, Safari), deno and node.js.
 
+The module can be imported from https://deno.land/x/caller_metadata@v0.0.2/src/main.ts when running in deno, or from https://webproxy.unyt.org/https://deno.land/x/caller_metadata@v0.0.2/src/main.ts
+when running in the browser.
 
 ### Running the Examples
 
@@ -40,7 +41,7 @@ There are three methods for getting default caller metadata:
 To inject custom metadata to a function call, use the  `callWithMetadata()` method:
 
 ```typescript
-import { callWithMetadata, callWithMetadataAsync } from "https://cdn.jsdelivr.net/gh/unyt-org/js-function-caller-metadata/dist/main.min.js";
+import { callWithMetadata, callWithMetadataAsync } from "https://webproxy.unyt.org/https://deno.land/x/caller_metadata@v0.0.1/src/main.ts";
 
 const result = callWithMetadata(custom_metadata, function_to_call, [arg1, arg2, arg3])
 const result = await callWithMetadataAsync(custom_metadata, async_function_to_call, [arg1, arg2, arg3])
@@ -49,7 +50,7 @@ const result = await callWithMetadataAsync(custom_metadata, async_function_to_ca
 Within the called function, the metadata object can be retrieved with the `getMeta()` function:
 
 ```typescript
-import { getMeta } from "https://cdn.jsdelivr.net/gh/unyt-org/js-function-caller-metadata/dist/main.min.js";
+import { getMeta } from "https://webproxy.unyt.org/https://deno.land/x/caller_metadata@v0.0.1/src/main.ts";
 
 function function_to_call(...args) {
 	console.log("metadata", getMeta())
