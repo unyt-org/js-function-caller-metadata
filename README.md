@@ -15,7 +15,7 @@ In addition to retrieving metadata about the caller (function name, path, locati
 ### Supported Environements
 This library is compatible with all major browsers (Firefox, Chrome, Safari), deno and node.js.
 
-The module can be imported from https://deno.land/x/caller_metadata@v0.0.2/src/main.ts when running in deno, or from https://webproxy.unyt.org/https://deno.land/x/caller_metadata@v0.0.2/src/main.ts
+The module can be imported from https://deno.land/x/caller_metadata/src/main.ts when running in deno, or from https://unyt.land/x/caller_metadata/src/main.ts
 when running in the browser.
 
 ### Running the Examples
@@ -27,13 +27,32 @@ You can find some examples in the `examples/` directory of this repository
  * Browser (dev console): go to `index.html`
 
 
-
 ## Getting caller information
 
 There are three methods for getting default caller metadata: 
  * `getCallerFile()` returns a url string of the caller module path
  * `getCallerDir()` returns a url string of the caller module directory
- * `getCallerInfo()` returns more detailed stack information
+ * `getCallerInfo()` returns more detailed stack information (function names, rows and columns)
+
+Example:
+```ts
+// file: ./mod-a.ts
+import { myCallee } from "./mod-b.ts"
+
+function theCaller() {
+    myCallee()
+}
+theCaller()
+```
+
+```ts
+// file: ./mod-b.ts
+import { getCallerFile } from "https://unyt.land/x/caller_metadata/src/main.ts";
+
+export function myCallee() {
+    console.log("file " + getCallerFile()); // "file: file:///parent-dir/modA.ts"
+}
+```
 
 
 ## Injecting custom metadata
@@ -41,26 +60,26 @@ There are three methods for getting default caller metadata:
 To inject custom metadata to a function call, use the  `callWithMetadata()` method:
 
 ```typescript
-import { callWithMetadata, callWithMetadataAsync } from "https://webproxy.unyt.org/https://deno.land/x/caller_metadata@v0.0.1/src/main.ts";
+import { callWithMetadata, callWithMetadataAsync } from "https://unyt.land/x/caller_metadata/src/main.ts";
 
-const result = callWithMetadata(custom_metadata, function_to_call, [arg1, arg2, arg3])
-const result = await callWithMetadataAsync(custom_metadata, async_function_to_call, [arg1, arg2, arg3])
+const result = callWithMetadata(customMetadata, functionToCall, [...args])
+const result = await callWithMetadataAsync(customMetadata, asyncFunctionToCall, [...args])
 ```
 
 Within the called function, the metadata object can be retrieved with the `getMeta()` function:
 
 ```typescript
-import { getMeta } from "https://webproxy.unyt.org/https://deno.land/x/caller_metadata@v0.0.1/src/main.ts";
+import { getMeta } from "https://unyt.land/x/caller_metadata/src/main.ts";
 
-function function_to_call(...args) {
-	console.log("metadata", getMeta())
+function functionToCall(...args) {
+	console.log("metadata", getMeta()) // customMetadata
 }
 ```
 
 There is an advantage to injecting metadata in this way rather than passing it via a function argument:
  * The metadata can be injected without declaring a new argument in the function, and thus is hidden from an external function caller. 
  
- 	This is not only useful for correct TypeScript types, but also ensures that you can only pass metadata to the function if you control the function (someone else could theoretically inject metadata to the function, but this can be prevented by using unique symbols or other unique identifiers)
+   This is not only useful for correct TypeScript types, but also ensures that you can only pass metadata to the function if you control the function (someone else could theoretically inject metadata to the function, but this can be prevented by using unique symbols or other unique identifiers)
 
  * You can pass in metadata even to a function with rest parameters, because the metadata is passed in separately.
 
